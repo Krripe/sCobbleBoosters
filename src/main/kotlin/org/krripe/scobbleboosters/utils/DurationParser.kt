@@ -31,4 +31,24 @@ object DurationParser {
 
         return total.coerceAtLeast(1L)
     }
+
+    fun formatMillis(milliseconds: Long): String {
+        var seconds = (milliseconds / 1000L).coerceAtLeast(0L)
+
+        val days = seconds / 86400L
+        seconds %= 86400L
+
+        val hours = seconds / 3600L
+        seconds %= 3600L
+
+        val minutes = seconds / 60L
+        seconds %= 60L
+
+        return buildList {
+            if (days > 0L) add("${days}d")
+            if (hours > 0L) add("${hours}h")
+            if (minutes > 0L) add("${minutes}m")
+            if (seconds > 0L || isEmpty()) add("${seconds}s")
+        }.joinToString(" ")
+    }
 }

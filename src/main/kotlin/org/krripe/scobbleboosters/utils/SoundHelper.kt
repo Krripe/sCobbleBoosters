@@ -20,18 +20,24 @@ object SoundHelper {
     ) {
         if (id.isNullOrBlank()) return
 
-        val now = System.currentTimeMillis()
-        val map = lastByPlayerAndId.getOrPut(player.uuid) { mutableMapOf() }
-        val last = map[id] ?: 0L
-        if (now - last < minGapMs) return
-        map[id] = now
+        val key = runCatching { Identifier.of(id.trim()) }.getOrNull() ?: return
+        val event = Registries.SOUND_EVENT.get(key) ?: return
 
-        val key = Identifier.of(id)
-        val ev = Registries.SOUND_EVENT.get(key) ?: return
-        player.playSoundToPlayer(ev, SoundCategory.PLAYERS, volume, pitch)
+        val now = System.currentTimeMillis()
+        val sounds = lastByPlayerAndId.getOrPut(player.uuid) { mutableMapOf() }
+        val last = sounds[id] ?: 0L
+
+        if (now - last < minGapMs) return
+
+        sounds[id] = now
+        player.playSoundToPlayer(event, SoundCategory.PLAYERS, volume.coerceAtLeast(0f), pitch.coerceAtLeast(0f))
     }
 
     fun resetPlayer(uuid: UUID) {
         lastByPlayerAndId.remove(uuid)
+    }
+
+    fun reset() {
+        lastByPlayerAndId.clear()
     }
 }

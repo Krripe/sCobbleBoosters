@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.3.10"
-    id("fabric-loom") version "1.15.3"
+    kotlin("jvm") version "2.4.10"
+    id("fabric-loom") version "1.17.20"
     id("maven-publish")
 }
 
@@ -23,8 +23,6 @@ java {
     withSourcesJar()
 }
 
-
-
 repositories {
     mavenCentral()
     maven("https://maven.impactdev.net/repository/development/")
@@ -40,7 +38,7 @@ dependencies {
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
     modImplementation(files("libs/fabric-permissions-api-0.3.3.jar"))
-    modImplementation("com.cobblemon:fabric:1.7.3+1.21.1")
+    modImplementation("com.cobblemon:fabric:1.8.1+1.21.1")
 }
 
 tasks.processResources {
